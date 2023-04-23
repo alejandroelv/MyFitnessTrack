@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "153296416597",
+    "project_id": "myfitnesstrack-cbd3a",
+    "storage_bucket": "myfitnesstrack-cbd3a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153296416597:android:59ae0ea6e5ada66b6149dc",
+        "android_client_info": {
+          "package_name": "com.alejandroelv.myfitnesstrack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "153296416597-kb264ov7jip5ol3iqfsesaq3r8lmukut.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANEweIjDQwtmj3KwkzfuEw78X7b44BExo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "153296416597-kb264ov7jip5ol3iqfsesaq3r8lmukut.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
