@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="10dp">
+
+    <!-- Enter your height section-->
+    <TextView
+        android:id="@+id/tvEnterHeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_your_height" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etHeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="height"
+            android:hint="@string/height"
+            android:inputType="numberSigned"
+            android:minWidth="45dp"
+            android:minHeight="45dp"
+            tools:ignore="TouchTargetSizeCheck"></EditText>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cm"
+            android:minWidth="45dp">
+        </TextView>
+    </LinearLayout>
+
+    <!-- Enter your weight section-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/enter_your_weight" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/etWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="weight"
+            android:hint="@string/weight"
+            android:inputType="numberSigned"
+            android:minWidth="48dp"
+            android:minHeight="48dp"></EditText>
+        <TextView
+            android:id="@+id/tvEnterWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/kg"
+            android:minWidth="45dp">
+        </TextView>
+        <Spinner
+            android:id="@+id/spWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:contentDescription="@string/select_weight_unit"
+            android:minHeight="48dp"></Spinner>
+    </LinearLayout>
+
+    <!-- Enter your age section-->
+    <TextView
+        android:id="@+id/tvEnterAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/enter_your_age" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/etAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="age"
+            android:hint="@string/age"
+            android:inputType="numberSigned"
+            android:minWidth="48dp"
+            android:minHeight="48dp"></EditText>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/years_old"
+            android:minWidth="45dp">
+        </TextView>
+    </LinearLayout>
+
+    <!-- Enter gender section-->
+    <TextView
+        android:id="@+id/tvSelectGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/select_your_gender" />
+
+
+    <RadioGroup
+        android:id="@+id/rgGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/rbMale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/male" />
+
+            <RadioButton
+                android:id="@+id/rbFemale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/female" />
+        </LinearLayout>
+    </RadioGroup>
+
+
+    <!-- Enter your activity level section-->
+    <TextView
+        android:id="@+id/tvSelectActivityLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/select_your_activity_level" />
+
+    <com.google.android.material.chip.Chip
+        android:checkable="true"
+        android:id="@+id/cpNotActive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/not_active">
+    </com.google.android.material.chip.Chip>
+    <com.google.android.material.chip.Chip
+        android:checkable="true"
+        android:id="@+id/cpModeratelyActive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/moderately_active">
+    </com.google.android.material.chip.Chip>
+    <com.google.android.material.chip.Chip
+        android:checkable="true"
+        android:id="@+id/cpActive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/active">
+    </com.google.android.material.chip.Chip>
+    <com.google.android.material.chip.Chip
+        android:checkable="true"
+        android:id="@+id/cpVeryActive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/very_active">
+    </com.google.android.material.chip.Chip>
+
+    <Button
+        android:id="@+id/buttonNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="64dp"
+        android:background="@drawable/rounded_edit_text"
+        android:minWidth="160dp"
+        android:minHeight="48dp"
+        android:text="@string/next"></Button>
+</LinearLayout>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="30dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="10dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/enter_your_weight_goal"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="weight"
+            android:hint="@string/weight"
+            android:inputType="numberSigned"
+            android:minWidth="48dp"
+            android:minHeight="48dp"></EditText>
+        <TextView
+            android:id="@+id/tvEnterWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/kg"
+            android:minWidth="45dp">
+        </TextView>
+        <Spinner
+            android:id="@+id/spWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:contentDescription="@string/select_weight_unit"
+            android:minHeight="48dp"></Spinner>
+    </LinearLayout>
+
+    <!-- Enter your activity level section-->
+    <TextView
+        android:id="@+id/tvSelectActivityLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/select_your_weekly_goal" />
+
+    <com.google.android.material.chip.Chip
+        android:checkable="true"
+        android:id="@+id/cploseHalf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.google.android.material.chip.Chip>
+    <com.google.android.material.chip.Chip
+        android:checkable="true"
+        android:id="@+id/cploseOne"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.google.android.material.chip.Chip>
+    <com.google.android.material.chip.Chip
+        android:checkable="true"
+        android:id="@+id/cploseOneAndHalf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.google.android.material.chip.Chip>
+    <com.google.android.material.chip.Chip
+        android:checkable="true"
+        android:id="@+id/cploseTwo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.google.android.material.chip.Chip>
+
+    <Button
+        android:id="@+id/buttonPrevious"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/rounded_edit_text"
+        android:minWidth="160dp"
+        android:minHeight="48dp"
+        android:text="@string/previous"></Button>
+
+    <Button
+        android:id="@+id/buttonNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="64dp"
+        android:background="@drawable/rounded_edit_text"
+        android:minWidth="160dp"
+        android:minHeight="48dp"
+        android:text="@string/next"></Button>
+</LinearLayout>

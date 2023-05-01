@@ -8,7 +8,58 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_password">Password must be longer than 6 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="empty_fields_login">Please, enter your username and password to log in</string>
+    <string name="introduce_your_data">Introduce your data to register:</string>
+    <string name="fullName">Your full name</string>
+    <string name="email">Your email</string>
+    <string name="userName">Your username</string>
+    <string name="password">Password</string>
+    <string name="empty_fields_register">Please, enter all the fields before trying to submit</string>
+    <string name="invalid_age">The age introduced must be between 16 and 120</string>
+    <string name="invalid_height">The height introduced must be higher than 0</string>
+    <string name="invalid_weight">The weight introduced must be higher than 0</string>
+    <string name="select_gender">Please, select your gender before submitting</string>
+    <string name="select_activity_level">Please, select your activity level before submitting</string>
+    <string name="explanation_weight">Hello blank fragment</string>
+    <string name="enter_your_height">Enter your height:</string>
+    <string name="height">Height</string>
+    <string name="cm">cm</string>
+    <string name="feet">feet</string>
+    <string name="inches">inches</string>
+    <string name="male">Male</string>
+    <string name="not_active">Not active</string>
+    <string name="select_your_activity_level">Select your activity level:</string>
+    <string name="female">Female</string>
+    <string name="moderately_active">Moderately active</string>
+    <string name="select_your_gender">Select your gender:</string>
+    <string name="very_active">Very active</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="active">Active</string>
+    <string name="years_old">years old</string>
+    <string name="enter_your_weight">Enter your weight:</string>
+    <string name="weight">Weight</string>
+    <string name="enter_your_age">Enter your age:</string>
+    <string name="age">Age</string>
+    <string name="select_height_unit">Select height unit</string>
+    <string name="select_weight_unit">Select weight unit</string>
+    <string name="kg">kg</string>
+    <string name="pounds">pounds</string>
+    <string-array name="height_units">
+        <item>Centimeters</item>
+        <item>Feets and inches</item>
+    </string-array>
+    <string-array name="weight_units">
+        <item>Kilograms</item>
+        <item>Pounds</item>
+    </string-array>
+    <string name="enter_your_weight_goal">Enter your weight goal:</string>
+    <string name="select_your_weekly_goal">Select your weekly goal:</string>
+    <string name="lose">Lose</string>
+    <string name="by_week">by week</string>
+    <string name="invalid_goal">The introduced weight is not valid</string>
+    <string name="missing_goal_by_week">Please, select a goal by week before submitting</string>
+    <string name="last_register_step">We are almost finished.Create your account:</string>
 </resources>
