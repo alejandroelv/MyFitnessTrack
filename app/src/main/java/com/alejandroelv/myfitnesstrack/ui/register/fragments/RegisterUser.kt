@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.alejandroelv.myfitnesstrack.MainActivity
+import com.alejandroelv.myfitnesstrack.ui.main.MainActivity
 import com.alejandroelv.myfitnesstrack.R
 import com.alejandroelv.myfitnesstrack.data.model.User
 import com.alejandroelv.myfitnesstrack.databinding.FragmentRegisterUserBinding
@@ -72,9 +72,9 @@ class RegisterUser : Fragment() {
 
                 dbReference.setValue(userMap).addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
-                        //TODO 4: Llamar a Main activity
                         val llamarMain = Intent(this.context, MainActivity::class.java)
                         startActivity(llamarMain)
+                        requireActivity().finish()
                     }
                 }
             }

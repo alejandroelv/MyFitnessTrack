@@ -18,7 +18,6 @@ import com.alejandroelv.myfitnesstrack.databinding.FragmentRegisterUserGoalBindi
 import com.google.android.material.chip.Chip
 
 class RegisterUserGoal : Fragment() {
-    private var weightMode: Int = 1
     private var chipList: ArrayList<Chip> = ArrayList()
     private lateinit var user: User
     private val goals = listOf<Double>(0.25, 0.5, 0.75, 1.0)
@@ -52,8 +51,8 @@ class RegisterUserGoal : Fragment() {
         binding.spWeight.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long){
                 when (position) {
-                    0 -> {binding.tvEnterWeight.text = getString(R.string.kg); weightMode = 1}
-                    1 -> {binding.tvEnterWeight.text = getString(R.string.pounds); weightMode = 2}
+                    0 -> {binding.tvEnterWeight.text = getString(R.string.kg); user.weightMode = 1}
+                    1 -> {binding.tvEnterWeight.text = getString(R.string.pounds); user.weightMode = 2}
                 }
 
                 changeTextsByMode()
@@ -63,25 +62,25 @@ class RegisterUserGoal : Fragment() {
         }
 
         binding.cploseHalf.setOnClickListener{
-            this.user.goalByWeek = goals[0] * weightMode
+            this.user.goalByWeek = goals[0] * user.weightMode
             uncheckOtherChips(binding.cploseHalf)
         }
         this.chipList.add(binding.cploseHalf)
 
         binding.cploseOne.setOnClickListener{
-            this.user.goalByWeek = goals[1] * weightMode
+            this.user.goalByWeek = goals[1] * user.weightMode
             uncheckOtherChips(binding.cploseOne)
         }
         this.chipList.add(binding.cploseOne)
 
         binding.cploseOneAndHalf.setOnClickListener{
-            this.user.goalByWeek = goals[2] * weightMode
+            this.user.goalByWeek = goals[2] * user.weightMode
             uncheckOtherChips(binding.cploseOneAndHalf)
         }
         this.chipList.add(binding.cploseOneAndHalf)
 
         binding.cploseTwo.setOnClickListener{
-            this.user.goalByWeek = goals[3] * weightMode
+            this.user.goalByWeek = goals[3] * user.weightMode
             uncheckOtherChips(binding.cploseTwo)
         }
         this.chipList.add(binding.cploseTwo)
@@ -93,10 +92,10 @@ class RegisterUserGoal : Fragment() {
     }
 
     private fun changeTextsByMode(){
-        val unit = if (weightMode == 1) getString(R.string.kg) else getString(R.string.pounds)
+        val unit = if (user.weightMode == 1) getString(R.string.kg) else getString(R.string.pounds)
 
         this.chipList.forEachIndexed{i, cp ->
-            cp.text = "${getString(R.string.lose)} ${goals[i] * weightMode} $unit ${getString(R.string.by_week)}"
+            cp.text = "${getString(R.string.lose)} ${goals[i] * user.weightMode} $unit ${getString(R.string.by_week)}"
         }
     }
 

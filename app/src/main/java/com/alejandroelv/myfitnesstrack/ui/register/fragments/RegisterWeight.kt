@@ -18,7 +18,6 @@ import com.google.android.material.chip.Chip
 
 class RegisterWeight : Fragment() {
     private var user: User = User()
-    private var weightMode: Int = 1
     private var chipList: ArrayList<Chip> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,8 +60,8 @@ class RegisterWeight : Fragment() {
         binding.spWeight.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long){
                 when (position) {
-                    0 -> {binding.tvEnterWeight.text = getString(R.string.kg); weightMode = 1}
-                    1 -> {binding.tvEnterWeight.text = getString(R.string.pounds); weightMode = 2}
+                    0 -> {binding.tvEnterWeight.text = getString(R.string.kg); user.weightMode = 1}
+                    1 -> {binding.tvEnterWeight.text = getString(R.string.pounds); user.weightMode = 2}
                 }
             }
 

@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:minWidth="160dp"
         android:layout_gravity="start"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="64dp"
         android:background="@drawable/rounded_edit_text"
         android:text="@string/action_register"

@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import com.alejandroelv.myfitnesstrack.databinding.ActivityLoginBinding
+import com.alejandroelv.myfitnesstrack.ui.main.MainActivity
 import com.alejandroelv.myfitnesstrack.ui.register.RegisterActivity
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -37,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.registerButton.setOnClickListener {
-            //TODO 1: Llamar a RegisterActivity
             val llamarRegister = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(llamarRegister)
         }

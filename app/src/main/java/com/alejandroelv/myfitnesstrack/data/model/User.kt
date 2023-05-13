@@ -9,6 +9,7 @@ data class User(
     var gender: Int = 0,
     var age: Int = 0,
     var weight: Int = 0,
+    var weightMode: Int = 1,
     var height: Int = 0,
     var activityLevel: Int = 0,
     var goal: Int = 0,
@@ -18,6 +19,7 @@ data class User(
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
+        parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
@@ -34,6 +36,7 @@ data class User(
         parcel.writeInt(gender)
         parcel.writeInt(age)
         parcel.writeInt(weight)
+        parcel.writeInt(weightMode)
         parcel.writeInt(height)
         parcel.writeInt(activityLevel)
         parcel.writeInt(goal)
