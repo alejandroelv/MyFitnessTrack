@@ -3,7 +3,6 @@ package com.alejandroelv.myfitnesstrack.ui.main
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,9 +22,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.util.Calendar
+import java.util.*
 
 class DiaryFragment : Fragment() {
     private lateinit var binding: FragmentDiaryBinding
@@ -37,30 +34,18 @@ class DiaryFragment : Fragment() {
         binding = FragmentDiaryBinding.bind(view)
 
         initLauncher()
-        fetchDayData(Calendar.getInstance().time.toString())
 
-        this.initRecyclerView(binding.rvBreakfast, "breakfast")
-        this.initRecyclerView(binding.rvLunch, "lunch")
-        this.initRecyclerView(binding.rvDinner, "dinner")
-        this.initRecyclerView(binding.rvSnacks, "snacks")
+        fetchDayData(Calendar.getInstance().time.toString())
 
         //TODO 5: Añadir que se actualicen los valores de las calorias de la seccion Remaining Calories
 
-        binding.tvAddBreakfast.setOnClickListener{
-            callSearchFoods("breakfast")
-        }
+        binding.tvAddBreakfast.setOnClickListener{ callSearchFoods("breakfast") }
 
-        binding.tvAddLunch.setOnClickListener{
-            callSearchFoods("lunch")
-        }
+        binding.tvAddLunch.setOnClickListener{ callSearchFoods("lunch") }
 
-        binding.tvAddDinner.setOnClickListener{
-            callSearchFoods("dinner")
-        }
+        binding.tvAddDinner.setOnClickListener{ callSearchFoods("dinner") }
 
-        binding.tvAddSnacks.setOnClickListener{
-            callSearchFoods("snacks")
-        }
+        binding.tvAddSnacks.setOnClickListener{ callSearchFoods("snacks") }
 
         //TODO 9: Poner un textListener a food/ExerciseCalories/ para recalcular las calorias (Implementar otra recarga?)
 
@@ -68,7 +53,6 @@ class DiaryFragment : Fragment() {
     }
 
     //TODO 3: Llamar a firebase para traerme el Day
-
     private fun fetchDayData(date: String){
         val user = FirebaseAuth.getInstance().currentUser
         val uid = user!!.uid
@@ -81,14 +65,18 @@ class DiaryFragment : Fragment() {
         //TODO 10: Testar fetchDayData
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // The object data is available in dataSnapshot
                 if (dataSnapshot.exists()) {
                     day = dataSnapshot.getValue(Day::class.java)!!
-
+                    Toast.makeText(context, "Yo yo yo yo", Toast.LENGTH_SHORT).show()
+                    initAllRecyclerViews()
                 } else {
-                    // Object does not exist in the reference
-
+                    //TODO 1: Traerme las goal calories del usuario
+                    //If the day doesnt exist in the database, create a new one
+                    day = Day()
+                    Toast.makeText(context, "No funciona we", Toast.LENGTH_SHORT).show()
                 }
+
+                setCalories()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -103,7 +91,7 @@ class DiaryFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
                 val meal = data?.getStringExtra("meal")
-                val newFood = data?.getSerializableExtra("hintList") as? Hint
+                val newFood = data?.getSerializableExtra("food") as? Hint
 
                 if (newFood != null) {
                     //Add or update the food
@@ -113,16 +101,23 @@ class DiaryFragment : Fragment() {
                     updateDay()
 
                     //TODO 8: Actualizar las foodCalories
-
+                    setCalories()
                 }
             }
         }
     }
 
+    private fun initAllRecyclerViews(){
+        this.initRecyclerView(binding.rvBreakfast, "breakfast")
+        this.initRecyclerView(binding.rvLunch, "lunch")
+        this.initRecyclerView(binding.rvDinner, "dinner")
+        this.initRecyclerView(binding.rvSnacks, "snacks")
+    }
+
     private fun initRecyclerView(rv: RecyclerView, meal: String){
        rv.adapter = this.day.meals[meal]?.let {
            FoodAdapter(it.foods, object : FoodAdapter.OnItemClickListener {
-               override fun onItemClick(result: Hint) { callFoodDetails(result) }
+               override fun onItemClick(result: Hint) { callFoodDetails(result, meal) }
            })
        }
 
@@ -135,19 +130,23 @@ class DiaryFragment : Fragment() {
         activityLauncher.launch(intent)
     }
 
-    private fun calculateRemainingCalories(){
-        val exerciseCalories = Integer.valueOf(binding.tvExerciseCalories.text.toString())
-        val goalCalories = Integer.valueOf(binding.tvGoalCalories.text.toString())
-        val foodCalories = Integer.valueOf(binding.tvFoodCalories.text.toString())
-        binding.tvRemainingCalories.text = (goalCalories - foodCalories + exerciseCalories).toString()
+    private fun setCalories(){
+        val exerciseCalories = day.getExerciseCalories()
+        val mealCalories = day.getMealCalories()
+        val goalCalories = day.goalCalories
+
+        binding.tvFoodCalories.text = mealCalories.toInt().toString()
+        binding.tvExerciseCalories.text = exerciseCalories.toInt().toString()
+        binding.tvGoalCalories.text = goalCalories.toInt().toString()
+        binding.tvRemainingCalories.text = (goalCalories - mealCalories - exerciseCalories).toInt().toString()
     }
 
-    private fun callFoodDetails(food: Hint){
+    private fun callFoodDetails(food: Hint, meal: String){
         //TODO 4.5: Llamar a FoodDetailsActivity
-//        val callFoodDetails = Intent(this@DiaryFragment, PeliculaActivity::class.java)
-//        callFoodDetails.putExtra("id", result.foodId)
-//        startActivity(callFoodDetails)
-        Log.e("si", food.food?.foodId!!)
+        val intent = Intent(this.context, FoodDetailsActivity::class.java)
+        intent.putExtra("food", food)
+        intent.putExtra("meal", meal)
+        activityLauncher.launch(intent)
     }
 
     private fun searchFoodOnList(foodList: List<Hint>, foodId: String) : Int{
@@ -157,7 +156,7 @@ class DiaryFragment : Fragment() {
     private fun addFoodToList(foodList: List<Hint>, newFood: Hint) : List<Hint>{
         //If the food is not on the list, add it. Otherwise, update it
         val foodPosition :Int = searchFoodOnList(foodList, newFood.food?.foodId!!)
-        var newFoodList = foodList.toMutableList()
+        val newFoodList = foodList.toMutableList()
 
         if(foodPosition == -1){
             newFoodList.add(newFood)
@@ -174,7 +173,9 @@ class DiaryFragment : Fragment() {
 
         if (uid != null) {
             val reference = FirebaseDatabase.getInstance().getReference("users")
-                .child(uid).child("days").child(day.date.toString())
+                .child(uid)
+                .child("days")
+                .child(day.date.toString())
 
             val updates = HashMap<String, Any>()
             updates["date"] = day.date
@@ -184,12 +185,12 @@ class DiaryFragment : Fragment() {
             reference.push().updateChildren(updates)
                 .addOnSuccessListener {
                     // Value updated successfully
-
+                    Toast.makeText(context, "Yo mr White", Toast.LENGTH_SHORT).show()
 
                 }
                 .addOnFailureListener {
                     // An error occurred while updating the value
-
+                    Toast.makeText(context, "AAAAAAAAAAAAAAAAAAAAAAA", Toast.LENGTH_SHORT).show()
                 }
         }
     }

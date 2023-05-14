@@ -80,4 +80,5 @@
     <string name="next_arrow"><![CDATA[>]]></string>
     <string name="prompt_food">Search foods</string>
     <string name="recent_foods">Recent foods</string>
+    <string name="found_foods">Foods found</string>
 </resources>

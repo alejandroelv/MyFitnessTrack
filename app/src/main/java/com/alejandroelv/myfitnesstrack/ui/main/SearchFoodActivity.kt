@@ -1,5 +1,6 @@
 package com.alejandroelv.myfitnesstrack.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -32,12 +33,15 @@ class SearchFoodActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchFoodBinding
     private var foodList: ArrayList<Hint> = ArrayList()
     private lateinit var service: EdamamService
+    private var meal: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivitySearchFoodBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        meal = intent.extras?.getString("meal")
 
         initFoodService()
         rechargeRecentFoods()
@@ -120,6 +124,7 @@ class SearchFoodActivity : AppCompatActivity() {
 
         callFoods.enqueue(object : Callback<Foods> {
             override fun onResponse(call: Call<Foods>, response: Response<Foods>) {
+                binding.tvHint.text = getString(R.string.found_foods)
                 foodList = response.body()?.hints as ArrayList<Hint>
                 adapter.setDatos(foodList)
                 adapter.notifyDataSetChanged()
@@ -132,6 +137,9 @@ class SearchFoodActivity : AppCompatActivity() {
     }
 
     private fun callFoodDetails(food: Hint){
-
+        val intent = Intent(this@SearchFoodActivity, FoodDetailsActivity::class.java)
+        intent.putExtra("food", food)
+        intent.putExtra("meal", meal)
+        startActivity(intent)
     }
 }
