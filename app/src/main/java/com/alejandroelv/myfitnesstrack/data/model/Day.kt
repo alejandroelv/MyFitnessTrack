@@ -1,17 +1,19 @@
 package com.alejandroelv.myfitnesstrack.data.model
 
+import com.alejandroelv.myfitnesstrack.TimeUtils
 import com.alejandroelv.myfitnesstrack.data.model.Meal
 import com.alejandroelv.myfitnesstrack.data.model.edamamModels.Hint
 import java.util.*
 
 class Day {
-    var date: Date
+    var id: String? = null
+    var date: String
     var meals: HashMap<String, Meal>
     var exercises: List<Exercise>
     var goalCalories: Double
 
     constructor() {
-        date = Calendar.getInstance().time
+        date = TimeUtils().getTodayDate()
         meals = HashMap()
         meals["breakfast"] = Meal("breakfast", ArrayList<Hint>())
         meals["lunch"] = Meal("lunch", ArrayList<Hint>())
@@ -21,7 +23,7 @@ class Day {
         goalCalories = 0.0
     }
 
-    constructor(date: Date, meals: HashMap<String, Meal>, exercises: List<Exercise>, goalCalories: Double) {
+    constructor(date: String, meals: HashMap<String, Meal>, exercises: List<Exercise>, goalCalories: Double) {
         this.date = date
         this.meals = meals
         this.exercises = exercises

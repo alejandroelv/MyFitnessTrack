@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
@@ -141,5 +140,6 @@ class SearchFoodActivity : AppCompatActivity() {
         intent.putExtra("food", food)
         intent.putExtra("meal", meal)
         startActivity(intent)
+        finish()
     }
 }

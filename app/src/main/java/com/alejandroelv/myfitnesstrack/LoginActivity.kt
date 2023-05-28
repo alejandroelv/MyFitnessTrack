@@ -2,6 +2,7 @@ package com.alejandroelv.myfitnesstrack
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -23,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
 
         if(this.firebaseUser != null){
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            Log.e("USER UID", Firebase.auth.currentUser?.uid!!)
             startActivity(intent)
             finish()
         }

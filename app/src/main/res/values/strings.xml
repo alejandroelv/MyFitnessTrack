@@ -81,4 +81,5 @@
     <string name="prompt_food">Search foods</string>
     <string name="recent_foods">Recent foods</string>
     <string name="found_foods">Foods found</string>
+    <string name="Grams">Grams</string>
 </resources>

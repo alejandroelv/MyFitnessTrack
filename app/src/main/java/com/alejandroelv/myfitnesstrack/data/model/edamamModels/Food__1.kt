@@ -23,6 +23,8 @@ class Food__1 : Serializable{
     @Expose
     var nutrients: Nutrients__1? = null
 
+    var selectedWeight : Int = 100
+
     @SerializedName("category")
     @Expose
     var category: String? = null

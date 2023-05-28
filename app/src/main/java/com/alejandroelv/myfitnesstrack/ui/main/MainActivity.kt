@@ -1,7 +1,6 @@
 package com.alejandroelv.myfitnesstrack.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.alejandroelv.myfitnesstrack.R
 import com.alejandroelv.myfitnesstrack.databinding.ActivityMainBinding
@@ -14,7 +13,6 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //TODO 1: Implementar el bottomNavigation
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> {

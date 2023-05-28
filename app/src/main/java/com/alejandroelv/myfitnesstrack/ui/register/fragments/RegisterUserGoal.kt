@@ -3,7 +3,6 @@ package com.alejandroelv.myfitnesstrack.ui.register.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -111,8 +110,6 @@ class RegisterUserGoal : Fragment() {
         when{
             user.goal <= 0 || (user.goal <= (user.height - 120)) -> {
                 Toast.makeText(context, R.string.invalid_goal, Toast.LENGTH_SHORT).show()
-                Log.e("Booleano", (user.goal <= (user.height - 120)).toString())
-                Log.e("User goal", user.goal.toString())
             }
             user.goalByWeek == 0.0 ->{
                 Toast.makeText(context, R.string.select_your_weekly_goal, Toast.LENGTH_SHORT).show()

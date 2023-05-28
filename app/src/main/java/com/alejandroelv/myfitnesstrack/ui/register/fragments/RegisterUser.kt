@@ -2,19 +2,17 @@ package com.alejandroelv.myfitnesstrack.ui.register.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.alejandroelv.myfitnesstrack.ui.main.MainActivity
+import androidx.fragment.app.Fragment
 import com.alejandroelv.myfitnesstrack.R
 import com.alejandroelv.myfitnesstrack.data.model.User
 import com.alejandroelv.myfitnesstrack.databinding.FragmentRegisterUserBinding
+import com.alejandroelv.myfitnesstrack.ui.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterUser : Fragment() {
     private lateinit var user: User
@@ -55,29 +53,31 @@ class RegisterUser : Fragment() {
     }
 
     private fun register(email: String, password: String){
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(requireActivity()) { task ->
-            if (task.isSuccessful) {
-                val userId: String = auth.currentUser!!.uid
-                val dbReference: DatabaseReference =
-                    Firebase.database.reference.child("users").child(userId)
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    val userId: String = auth.currentUser!!.uid
+                    val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+                    val userDocumentRef = db.collection("users").document(userId)
 
-                val userMap = hashMapOf<String, Any>()
-                userMap["id"] = userId
-                userMap["gender"] = user.gender
-                userMap["age"] = user.age
-                userMap["weight"] = user.weight
-                userMap["height"] = user.weight
-                userMap["goal"] = user.goal
-                userMap["goalByWeek"] = user.goalByWeek
+                    val userMap = hashMapOf<String, Any>()
+                    userMap["id"] = userId
+                    userMap["gender"] = user.gender
+                    userMap["age"] = user.age
+                    userMap["weight"] = user.weight
+                    userMap["height"] = user.weight
+                    userMap["goal"] = user.goal
+                    userMap["goalByWeek"] = user.goalByWeek
 
-                dbReference.setValue(userMap).addOnCompleteListener(requireActivity()) { task ->
-                    if (task.isSuccessful) {
-                        val llamarMain = Intent(this.context, MainActivity::class.java)
-                        startActivity(llamarMain)
-                        requireActivity().finish()
-                    }
+                    userDocumentRef.set(userMap)
+                        .addOnCompleteListener(requireActivity()) { task ->
+                            if (task.isSuccessful) {
+                                val llamarMain = Intent(this.context, MainActivity::class.java)
+                                startActivity(llamarMain)
+                                requireActivity().finish()
+                            }
+                        }
                 }
             }
-        }
     }
 }
