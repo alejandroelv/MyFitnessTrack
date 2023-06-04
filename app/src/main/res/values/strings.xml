@@ -82,4 +82,6 @@
     <string name="recent_foods">Recent foods</string>
     <string name="found_foods">Foods found</string>
     <string name="Grams">Grams</string>
+    <string name="today">Today</string>
+    <string name="remove">Remove</string>
 </resources>

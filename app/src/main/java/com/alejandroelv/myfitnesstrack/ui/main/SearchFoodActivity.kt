@@ -33,6 +33,7 @@ class SearchFoodActivity : AppCompatActivity() {
     private var foodList: ArrayList<Hint> = ArrayList()
     private lateinit var service: EdamamService
     private var meal: String? = null
+    private var date: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,7 @@ class SearchFoodActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         meal = intent.extras?.getString("meal")
+        date = intent.extras?.getString("date")
 
         initFoodService()
         rechargeRecentFoods()
@@ -94,7 +96,6 @@ class SearchFoodActivity : AppCompatActivity() {
     private fun rechargeRecentFoods(){
         binding.tvHint.text = getString(R.string.recent_foods)
 
-        //TODO: Llamar a firebase para que me de las comidas recientes
         val database = FirebaseDatabase.getInstance()
         val recentsFoodsRef = database.getReference("recentFoods")
 
@@ -139,6 +140,7 @@ class SearchFoodActivity : AppCompatActivity() {
         val intent = Intent(this@SearchFoodActivity, FoodDetailsActivity::class.java)
         intent.putExtra("food", food)
         intent.putExtra("meal", meal)
+        intent.putExtra("date", date)
         startActivity(intent)
         finish()
     }

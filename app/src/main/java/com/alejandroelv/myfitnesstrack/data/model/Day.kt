@@ -23,6 +23,17 @@ class Day {
         goalCalories = 0.0
     }
 
+    constructor(date: String) {
+        this.date = date
+        meals = HashMap()
+        meals["breakfast"] = Meal("breakfast", ArrayList<Hint>())
+        meals["lunch"] = Meal("lunch", ArrayList<Hint>())
+        meals["dinner"] = Meal("dinner", ArrayList<Hint>())
+        meals["snacks"] = Meal("snacks", ArrayList<Hint>())
+        exercises = ArrayList()
+        goalCalories = 0.0
+    }
+
     constructor(date: String, meals: HashMap<String, Meal>, exercises: List<Exercise>, goalCalories: Double) {
         this.date = date
         this.meals = meals

@@ -16,14 +16,15 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="2dp"
             android:text="@string/back_arrow"/>
+
         <TextView
             android:id="@+id/tvDay"
-            android:layout_width="80dp"
-            android:gravity="center"
-            android:textSize="18sp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="130dp"
-            android:text="Hoy"/>
+            android:layout_marginHorizontal="110dp"
+            android:gravity="center"
+            android:text="@string/today"
+            android:textSize="18sp" />
         <TextView
             android:id="@+id/tvDayAfter"
             android:layout_width="20dp"
@@ -166,7 +167,7 @@
                 android:id="@+id/tvBreakfastCalories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="300dp"
+                android:layout_marginStart="270dp"
                 android:text="0"
                 android:textStyle="bold"/>
         </LinearLayout>
@@ -175,12 +176,13 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvBreakfast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp" />
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -216,7 +218,7 @@
                 android:id="@+id/tvLunchCalories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="300dp"
+                android:layout_marginStart="270dp"
                 android:text="0"
                 android:textStyle="bold"/>
         </LinearLayout>
@@ -267,7 +269,7 @@
                 android:id="@+id/tvDinnerCalories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="300dp"
+                android:layout_marginStart="270dp"
                 android:text="0"
                 android:textStyle="bold"/>
         </LinearLayout>
@@ -318,7 +320,7 @@
                 android:id="@+id/tvSnacksCalories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="300dp"
+                android:layout_marginStart="270dp"
                 android:text="0"
                 android:textStyle="bold"/>
         </LinearLayout>

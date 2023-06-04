@@ -1,15 +1,11 @@
 package com.alejandroelv.myfitnesstrack.ui.main
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,26 +14,23 @@ import com.alejandroelv.myfitnesstrack.TimeUtils
 import com.alejandroelv.myfitnesstrack.data.model.Day
 import com.alejandroelv.myfitnesstrack.data.model.edamamModels.Hint
 import com.alejandroelv.myfitnesstrack.databinding.FragmentDiaryBinding
-import com.alejandroelv.myfitnesstrack.ui.adapters.FoodAdapter
+import com.alejandroelv.myfitnesstrack.ui.adapters.FoodDiaryAdapter
+import com.alejandroelv.myfitnesstrack.ui.adapters.ItemClickListener
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.*
 
-class DiaryFragment : Fragment() {
+class DiaryFragment : Fragment(), ItemClickListener {
     private lateinit var binding: FragmentDiaryBinding
     private lateinit var day: Day
+    private lateinit var date: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view =  inflater.inflate(R.layout.fragment_diary, container, false)
         binding = FragmentDiaryBinding.bind(view)
 
-        fetchDayData(TimeUtils().getTodayDate())
-
-        //TODO 5: Añadir que se actualicen los valores de las calorias de la seccion Remaining Calories
+        date = TimeUtils().getTodayDate()
+        fetchDayData(date)
 
         binding.tvAddBreakfast.setOnClickListener{ callSearchFoods("breakfast") }
 
@@ -47,12 +40,19 @@ class DiaryFragment : Fragment() {
 
         binding.tvAddSnacks.setOnClickListener{ callSearchFoods("snacks") }
 
-        //TODO 9: Poner un textListener a food/ExerciseCalories/ para recalcular las calorias (Implementar otra recarga?)
+        binding.tvDayBefore.setOnClickListener{
+            date = TimeUtils().calculateDate(date, -1)
+            fetchDayData(date)
+        }
+
+        binding.tvDayAfter.setOnClickListener{
+            date = TimeUtils().calculateDate(date, 1)
+            fetchDayData(date)
+        }
 
         return view
     }
 
-    //TODO 3: Llamar a firebase para traerme el Day
     private fun fetchDayData(date: String) {
         val user = FirebaseAuth.getInstance().currentUser
         val uid = user!!.uid
@@ -68,21 +68,26 @@ class DiaryFragment : Fragment() {
                 // Handle successful query results
                 if (querySnapshot.isEmpty) {
                     // Document doesn't exist for the given date
-                    day = Day()
+                    day = Day(date)
                     sendInfoToDiary()
                 } else {
                     // Document exists, access the first matching document
                     val documentSnapshot = querySnapshot.documents[0]
                     day = documentSnapshot.toObject(Day::class.java)!!
                     day.id = documentSnapshot.id
-                    initAllRecyclerViews()
-                    setCalories()
+                }
+
+                initAllRecyclerViews()
+                setCalories()
+
+                if(date != TimeUtils().getTodayDate()){
+                    binding.tvDay.text = day.date
+                }else{
+                    binding.tvDay.text = getString(R.string.today)
                 }
             }
             .addOnFailureListener { exception ->
-                // Handle failure while querying the documents
                 Log.e("TAG", "Error querying documents: ${exception.message}")
-                // Perform error handling or show an error message to the user
             }
     }
 
@@ -94,18 +99,20 @@ class DiaryFragment : Fragment() {
     }
 
     private fun initRecyclerView(rv: RecyclerView, meal: String){
-       rv.adapter = this.day.meals[meal]?.let {
-           FoodAdapter(it.foods, object : FoodAdapter.OnItemClickListener {
-               override fun onItemClick(result: Hint) { callFoodDetails(result, meal) }
-           })
-       }
 
-        rv.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL,false)
+        rv.adapter = FoodDiaryAdapter(this.day.meals[meal]?.foods!!,meal ,object : FoodDiaryAdapter.OnItemClickListener{
+            override fun onItemClick(result: Hint) { callFoodDetails(result, meal) }
+        })
+
+        (rv.adapter as FoodDiaryAdapter).setItemClickListener(this)
+
+        rv.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL,false)
     }
 
     private fun callSearchFoods(meal: String){
         val intent = Intent(this.context, SearchFoodActivity::class.java)
         intent.putExtra("meal", meal)
+        intent.putExtra("date", date)
         startActivity(intent)
     }
 
@@ -118,13 +125,18 @@ class DiaryFragment : Fragment() {
         binding.tvExerciseCalories.text = exerciseCalories.toInt().toString()
         binding.tvGoalCalories.text = goalCalories.toInt().toString()
         binding.tvRemainingCalories.text = (goalCalories - mealCalories - exerciseCalories).toInt().toString()
+
+        binding.tvBreakfastCalories.text = day.meals["breakfast"]?.totalKcal?.toInt().toString()
+        binding.tvLunchCalories.text = day.meals["lunch"]?.totalKcal?.toInt().toString()
+        binding.tvDinnerCalories.text = day.meals["dinner"]?.totalKcal?.toInt().toString()
+        binding.tvSnacksCalories.text = day.meals["snacks"]?.totalKcal?.toInt().toString()
     }
 
     private fun callFoodDetails(food: Hint, meal: String){
-        //TODO 4.5: Llamar a FoodDetailsActivity
         val intent = Intent(this.context, FoodDetailsActivity::class.java)
         intent.putExtra("food", food)
         intent.putExtra("meal", meal)
+        intent.putExtra("date", date)
         startActivity(intent)
     }
 
@@ -135,15 +147,29 @@ class DiaryFragment : Fragment() {
         if (uid != null) {
             val db = FirebaseFirestore.getInstance()
             val userDocumentRef = db.collection("users").document(uid)
-            val dayDocumentRef = userDocumentRef.collection("days").document()
 
-            dayDocumentRef.set(day)
-                .addOnSuccessListener {
+            val dayDocumentRef = if(day.id == null){
+                userDocumentRef.collection("days").document()
+            }else{
+                userDocumentRef.collection("days").document(day.id!!)
+            }
+
+            dayDocumentRef?.set(day)
+                ?.addOnSuccessListener {
                     Log.e("Saved", "Saved succesfully")
                 }
-                .addOnFailureListener { exception ->
+                ?.addOnFailureListener { exception ->
                     Log.e("No save", exception.message.toString())
                 }
         }
+    }
+
+    override fun onDeleteButtonClicked(food: Hint, meal: String) {
+        val newList = this.day.meals[meal]?.foods?.toMutableList()?.apply { remove(food) }
+        this.day.meals[meal]?.foods = newList?.toList()!!
+        day.meals[meal]?.calculateTotals()
+        sendInfoToDiary()
+        initAllRecyclerViews()
+        setCalories()
     }
 }

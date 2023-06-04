@@ -26,6 +26,7 @@ import java.util.*
 class FoodDetailsActivity : AppCompatActivity() {
     var food: Hint? = null
     var meal: String? = null
+    var date: String? = null
     lateinit var binding: ActivityFoodDetailsBinding
     private lateinit var day: Day
 
@@ -35,10 +36,11 @@ class FoodDetailsActivity : AppCompatActivity() {
         this.binding = ActivityFoodDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        fetchDayData(TimeUtils().getTodayDate())
-
         food = intent.extras?.getSerializable("food") as? Hint
         meal = intent.extras?.getString("meal")
+        date = intent.extras?.getString("date")
+
+        date?.let { fetchDayData(it) }
 
         if(food != null){
             displayFoodDetails()
@@ -82,10 +84,10 @@ class FoodDetailsActivity : AppCompatActivity() {
         binding.tvMeal.text = meal
 
         binding.tvFoodName.text = food?.food?.label
-        binding.tvCalories.text = food?.food?.nutrients?.enercKcal.toString()
-        binding.tvCarbohydrates.text = "${food?.food?.nutrients?.chocdf.toString()}g"
-        binding.tvFat.text = "${food?.food?.nutrients?.fat.toString()} g"
-        binding.tvProtein.text = "${food?.food?.nutrients?.procnt.toString()} g"
+        binding.tvCalories.text = String.format("%.2f", food?.food?.nutrients?.enercKcal)
+        binding.tvCarbohydrates.text = "${String.format("%.2f", food?.food?.nutrients?.chocdf)}g"
+        binding.tvFat.text = "${String.format("%.2f",food?.food?.nutrients?.fat)} g"
+        binding.tvProtein.text = "${String.format("%.2f",food?.food?.nutrients?.procnt)} g"
     }
 
     private fun fetchDayData(date: String) {
@@ -103,7 +105,7 @@ class FoodDetailsActivity : AppCompatActivity() {
                 // Handle successful query results
                 if (querySnapshot.isEmpty) {
                     // Document doesn't exist for the given date
-                    day = Day()
+                    day = Day(date)
                     sendInfoToDiary()
                 } else {
                     // Document exists, access the first matching document
@@ -112,23 +114,24 @@ class FoodDetailsActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception ->
-                // Handle failure while querying the documents
                 Log.e("TAG", "Error querying documents: ${exception.message}")
-                // Perform error handling or show an error message to the user
             }
     }
-    //TODO 2: BUSCAR SI LA COMIDA A ALMACENAR YA ESTA EN LA MEAL INDICADA Y SUSTITUIRLA O AÑADIRLA
+
     private fun addFoodToMeal(){
         val newList = day.meals[meal]?.foods.orEmpty().toMutableList()
         val foodPosition = searchFoodInMeal(food!!)
 
         if (foodPosition != -1) {
             newList[foodPosition] = food!!
+            Log.e("Updateo", "Comidita")
         } else {
             newList.add(food!!)
+            Log.e("Añado", "Comidita")
         }
 
         day.meals[meal]?.foods = newList.toList()
+        day.meals[meal]?.calculateTotals()
     }
 
     private fun searchFoodInMeal(foodToSearch : Hint) : Int{
@@ -156,7 +159,7 @@ class FoodDetailsActivity : AppCompatActivity() {
             val dayDocumentRef = userDocumentRef.collection("days")
 
             dayDocumentRef
-                .whereEqualTo("date", TimeUtils().getTodayDate()).limit(1)
+                .whereEqualTo("date", date).limit(1)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {

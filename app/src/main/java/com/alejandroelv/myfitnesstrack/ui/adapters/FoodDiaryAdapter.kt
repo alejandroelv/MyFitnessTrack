@@ -3,6 +3,7 @@ package com.alejandroelv.myfitnesstrack.ui.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.alejandroelv.myfitnesstrack.R
@@ -10,10 +11,17 @@ import com.alejandroelv.myfitnesstrack.data.model.Meal
 import com.alejandroelv.myfitnesstrack.data.model.edamamModels.Hint
 import java.util.ArrayList
 
-class FoodAdapter(private var datos: List<Hint>, private val listener: OnItemClickListener) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
+class FoodDiaryAdapter(private var datos: List<Hint>, private var meal: String, private val listener: OnItemClickListener) : RecyclerView.Adapter<FoodDiaryAdapter.FoodViewHolder>() {
 
-    fun setDatos(datos: List<Hint>) {
+    private lateinit var itemClickListener: ItemClickListener
+
+    fun setItemClickListener(listener: ItemClickListener) {
+        itemClickListener = listener
+    }
+
+    fun setDatos(datos: List<Hint>, meal: String) {
         this.datos = datos;
+        this.meal = meal
     }
 
     /* Defino un interface con el OnItemClickListener*/
@@ -22,25 +30,27 @@ class FoodAdapter(private var datos: List<Hint>, private val listener: OnItemCli
     }
 
     /* Incluyo el Viewholder en el Adapter */
-    class FoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class FoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         /* Como atributos se incluyen los elementos que van a referenciar a los elementos de la vista*/
         private val tvFoodName: TextView
         private val tvFoodCalories: TextView
-        private val tvFoodDescription: TextView
+        private val deleteButton: Button
 
         /*constructor con parámetro de la vista*/
         init{
             this.tvFoodName = itemView.findViewById(R.id.tvFoodName)
             this.tvFoodCalories = itemView.findViewById(R.id.tvFoodCalories)
-            this.tvFoodDescription = itemView.findViewById(R.id.tvFoodDescription)
+            this.deleteButton = itemView.findViewById(R.id.deleteButton)
         }
 
         /*Muestra los datos de jugador en el item*/
         fun bindFood(result: Hint, listener: OnItemClickListener) {
             this.tvFoodName.text = result.food?.label
             this.tvFoodCalories.text = "${result.food?.nutrients?.enercKcal?.toInt().toString()} kcal"
-            this.tvFoodDescription.text = "${result.food?.label} ${result.measures?.get(0)?.label}"
 
+            this.deleteButton.setOnClickListener{
+                itemClickListener.onDeleteButtonClicked(result, meal)
+            }
 
             /* Coloco el listener a la vista*/
             itemView.setOnClickListener{ listener.onItemClick(result); }
@@ -49,7 +59,7 @@ class FoodAdapter(private var datos: List<Hint>, private val listener: OnItemCli
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int) : FoodViewHolder{
         val itemView: View = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.food_item, viewGroup, false);
+            .inflate(R.layout.food_item_diary, viewGroup, false);
 
         return FoodViewHolder(itemView);
     }

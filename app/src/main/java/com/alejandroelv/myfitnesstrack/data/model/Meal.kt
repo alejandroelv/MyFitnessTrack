@@ -30,6 +30,10 @@ class Meal : Serializable {
     }
 
     fun calculateTotals() {
+        totalKcal = 0.0
+        totalProtein = 0.0
+        totalCarbohydrates = 0.0
+        totalFat = 0.0
         for (hint in foods) {
             totalKcal += hint.food?.nutrients?.enercKcal!!
             totalProtein += hint.food?.nutrients?.procnt!!
