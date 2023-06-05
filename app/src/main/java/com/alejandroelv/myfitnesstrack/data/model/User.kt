@@ -13,7 +13,8 @@ data class User(
     var height: Int = 0,
     var activityLevel: Int = 0,
     var goal: Int = 0,
-    var goalByWeek: Double = 0.0
+    var goalByWeek: Double = 0.0,
+    var goalCalories: Int = 0
 ) : Parcelable {
     // add parcelable implementation here
     constructor(parcel: Parcel) : this(
@@ -26,7 +27,8 @@ data class User(
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
-        parcel.readDouble()
+        parcel.readDouble(),
+        parcel.readInt()
     ) {
     }
 
@@ -41,6 +43,7 @@ data class User(
         parcel.writeInt(activityLevel)
         parcel.writeInt(goal)
         parcel.writeDouble(goalByWeek)
+        parcel.writeInt(goalCalories)
     }
 
     override fun describeContents(): Int {

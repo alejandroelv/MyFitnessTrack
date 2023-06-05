@@ -1,6 +1,8 @@
 package com.alejandroelv.myfitnesstrack.ui.register.fragments
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -65,9 +67,10 @@ class RegisterUser : Fragment() {
                     userMap["gender"] = user.gender
                     userMap["age"] = user.age
                     userMap["weight"] = user.weight
-                    userMap["height"] = user.weight
+                    userMap["height"] = user.height
                     userMap["goal"] = user.goal
                     userMap["goalByWeek"] = user.goalByWeek
+                    userMap["goalCalories"] = 88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * user.age)
 
                     userDocumentRef.set(userMap)
                         .addOnCompleteListener(requireActivity()) { task ->
