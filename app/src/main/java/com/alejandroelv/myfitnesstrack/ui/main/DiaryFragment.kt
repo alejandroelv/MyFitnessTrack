@@ -1,5 +1,6 @@
 package com.alejandroelv.myfitnesstrack.ui.main
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +18,6 @@ import com.alejandroelv.myfitnesstrack.databinding.FragmentDiaryBinding
 import com.alejandroelv.myfitnesstrack.ui.adapters.FoodDiaryAdapter
 import com.alejandroelv.myfitnesstrack.ui.adapters.ItemClickListener
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 class DiaryFragment : Fragment(), ItemClickListener {
@@ -149,6 +149,9 @@ class DiaryFragment : Fragment(), ItemClickListener {
             val userDocumentRef = db.collection("users").document(uid)
 
             val dayDocumentRef = if(day.id == null){
+                day.goalCalories = (context?.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+                    ?.getInt("goalCalories", 0)?.toLong() ?: 0L).toDouble()
+
                 userDocumentRef.collection("days").document()
             }else{
                 userDocumentRef.collection("days").document(day.id!!)

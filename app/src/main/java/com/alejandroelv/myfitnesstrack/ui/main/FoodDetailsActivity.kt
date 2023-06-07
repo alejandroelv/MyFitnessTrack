@@ -1,27 +1,17 @@
 package com.alejandroelv.myfitnesstrack.ui.main
 
-import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
-import com.alejandroelv.myfitnesstrack.R
-import com.alejandroelv.myfitnesstrack.TimeUtils
+import androidx.appcompat.app.AppCompatActivity
 import com.alejandroelv.myfitnesstrack.data.model.Day
 import com.alejandroelv.myfitnesstrack.data.model.edamamModels.Hint
 import com.alejandroelv.myfitnesstrack.databinding.ActivityFoodDetailsBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.*
 
 class FoodDetailsActivity : AppCompatActivity() {
     var food: Hint? = null
@@ -46,9 +36,7 @@ class FoodDetailsActivity : AppCompatActivity() {
             displayFoodDetails()
         }
 
-        binding.tvSaveFood.setOnClickListener{
-            sendInfoToDiary()
-        }
+        binding.tvSaveFood.setOnClickListener{ sendInfoToDiary() }
 
         binding.tvNumberOfServings.text = Editable.Factory.getInstance().newEditable(food?.food?.selectedWeight.toString())
 

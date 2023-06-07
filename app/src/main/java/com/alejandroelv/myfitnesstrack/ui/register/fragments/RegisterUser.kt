@@ -15,6 +15,7 @@ import com.alejandroelv.myfitnesstrack.databinding.FragmentRegisterUserBinding
 import com.alejandroelv.myfitnesstrack.ui.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.math.roundToInt
 
 class RegisterUser : Fragment() {
     private lateinit var user: User
@@ -71,6 +72,14 @@ class RegisterUser : Fragment() {
                     userMap["goal"] = user.goal
                     userMap["goalByWeek"] = user.goalByWeek
                     userMap["goalCalories"] = 88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * user.age)
+
+                    val goalCalories: Double = userMap["goalCalories"] as Double
+                    val roundedGoalCalories = goalCalories.roundToInt()
+
+                    val sharedPref: SharedPreferences? = context?.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+                    val editor: SharedPreferences.Editor? = sharedPref?.edit()
+                    editor?.putInt("goalCalories", roundedGoalCalories)
+                    editor?.apply()
 
                     userDocumentRef.set(userMap)
                         .addOnCompleteListener(requireActivity()) { task ->

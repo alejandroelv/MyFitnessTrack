@@ -31,4 +31,8 @@ class TimeUtils {
 
         return sdf.format(c.time)
     }
+
+    fun toMinutes(hours:Int, minutes:Int) : Int{
+        return (hours * 60) + minutes
+    }
 }
