@@ -122,7 +122,14 @@ class HomeFragment : Fragment() {
         if(TimeUtils().toMinutes(day.hoursOfSleep, day.minutesOfSleep) == 0){
             binding.progressBarSleep.progress = 0
         }else{
-            binding.progressBarSleep.progress = (8 * 60) / TimeUtils().toMinutes(day.hoursOfSleep, day.minutesOfSleep)
+            val totalMinutesOfSleep = TimeUtils().toMinutes(day.hoursOfSleep, day.minutesOfSleep)
+            val targetMinutesOfSleep = 8 * 60
+            var percentage = ((totalMinutesOfSleep.toDouble() / targetMinutesOfSleep) * 100).toInt()
+
+            if(percentage > 100){
+                percentage = 100
+            }
+            binding.progressBarSleep.progress = percentage
         }
     }
 

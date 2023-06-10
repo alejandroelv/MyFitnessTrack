@@ -1,10 +1,8 @@
 package com.alejandroelv.myfitnesstrack.api
 
-import com.alejandroelv.myfitnesstrack.data.model.edamamModels.Food
 import com.alejandroelv.myfitnesstrack.data.model.edamamModels.Foods
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface EdamamService {

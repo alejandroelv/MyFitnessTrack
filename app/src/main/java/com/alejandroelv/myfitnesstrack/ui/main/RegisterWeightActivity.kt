@@ -31,9 +31,9 @@ class RegisterWeightActivity : AppCompatActivity() {
     }
 
     private fun checkUserInput() : Boolean{
-        val inputWeight = binding.etWeight?.text?.toString()?.toDouble()
-        val inputBodyFat = binding.etBodyFat?.text?.toString()?.toDouble()
-        val inputMuscleMass = binding.etMuscleMass?.text?.toString()?.toDouble()
+        val inputWeight = binding.etWeight.text?.toString()?.toDouble()
+        val inputBodyFat = binding.etBodyFat.text?.toString()?.toDouble()
+        val inputMuscleMass = binding.etMuscleMass.text?.toString()?.toDouble()
 
         if (inputWeight != null) {
             if(inputWeight <= 0.0){
@@ -44,13 +44,13 @@ class RegisterWeightActivity : AppCompatActivity() {
         }
 
         if (inputBodyFat != null) {
-            if(inputBodyFat < 0 || inputBodyFat > 100){
+            if((inputBodyFat < 0) || (inputBodyFat > 100)){
                 Toast.makeText(this@RegisterWeightActivity, "The body fat introduced must be between 0 and 100", Toast.LENGTH_SHORT).show()
             }
         }
 
         if (inputMuscleMass != null) {
-            if(inputMuscleMass < 0 || inputMuscleMass > inputWeight!!){
+            if((inputMuscleMass < 0) || (inputMuscleMass > inputWeight!!)){
                 Toast.makeText(this@RegisterWeightActivity, "The muscle mass introduced must be between 0 and the weight introduced", Toast.LENGTH_SHORT).show()
             }
         }
@@ -116,6 +116,7 @@ class RegisterWeightActivity : AppCompatActivity() {
                     val intent = Intent(this@RegisterWeightActivity, MainActivity::class.java)
                     startActivity(intent)
                 }else{
+                    Log.e("Error", "Failure on save")
                 }
             }.addOnFailureListener{
                 Log.e("Error", "Failure on save")

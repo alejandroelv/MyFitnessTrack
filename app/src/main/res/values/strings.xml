@@ -93,4 +93,7 @@
     <string name="muscle_mass">Muscle mass</string>
     <string name="body_fat">Body fat</string>
     <string name="introduce_data">Introduce data</string>
+    <string name="edit">Edit</string>
+    <string name="bed_time">Bed time</string>
+    <string name="wake_up_time">Wake up time</string>
 </resources>

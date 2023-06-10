@@ -1,7 +1,6 @@
 package com.alejandroelv.myfitnesstrack.data.model
 
 import com.alejandroelv.myfitnesstrack.TimeUtils
-import com.alejandroelv.myfitnesstrack.data.model.edamamModels.Hint
 
 class Day {
     var id: String? = null

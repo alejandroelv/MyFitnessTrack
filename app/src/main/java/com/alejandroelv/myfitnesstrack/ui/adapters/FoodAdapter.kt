@@ -6,9 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.alejandroelv.myfitnesstrack.R
-import com.alejandroelv.myfitnesstrack.data.model.Meal
 import com.alejandroelv.myfitnesstrack.data.model.edamamModels.Hint
-import java.util.ArrayList
 
 class FoodAdapter(private var datos: List<Hint>, private val listener: OnItemClickListener) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
