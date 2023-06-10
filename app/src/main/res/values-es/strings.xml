@@ -1,0 +1,98 @@
+<resources>
+    <string name="app_name">My Fitness Track</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_log_in">Entrar</string>
+    <string name="action_register">Registrar</string>
+    <string name="action_sign_in_short">Iniciar sesión</string>
+    <string name="welcome">"Bienvenido !"</string>
+    <string name="invalid_username">Nombre de usuario inválido</string>
+    <string name="invalid_password">La contraseña debe contener de mas 6 caracteres</string>
+    <string name="login_failed">"Error al iniciar sesión"</string>
+    <string name="empty_fields_login">Por favor, introduce tu usuario y tu contraseña para iniciar sesión</string>
+    <string name="introduce_your_data">Introduce tus datos para registrarte:</string>
+    <string name="fullName">Nombre completo</string>
+    <string name="email">Email</string>
+    <string name="userName">Nombre de usuario</string>
+    <string name="password">Password</string>
+    <string name="empty_fields_register">Por favor, rellena todos los campos antes de intentar avanzar</string>
+    <string name="invalid_age">La edad introducida debe estar entre 16 y 120</string>
+    <string name="invalid_height">La altura introducida debe ser superior a 0</string>
+    <string name="invalid_weight">El peso introducido debe ser superior a 0</string>
+    <string name="select_gender">Por favor, selecciona tu género antes de continuar</string>
+    <string name="select_activity_level">Por favor, selecciona tu nivel de actividad antes de continuar</string>
+    <string name="enter_your_height">Introduce tu altura:</string>
+    <string name="height">Altura</string>
+    <string name="cm">cm</string>
+    <string name="feet">feet</string>
+    <string name="inches">pulgadas</string>
+    <string name="male">Hombre</string>
+    <string name="not_active">Nada activo</string>
+    <string name="select_your_activity_level">Selecciona tu nivel de actividad:</string>
+    <string name="female">Mujer</string>
+    <string name="moderately_active">Moderadamente activo</string>
+    <string name="select_your_gender">Selecciona tu género:</string>
+    <string name="very_active">Muy activo</string>
+    <string name="next">Siguiente</string>
+    <string name="previous">Anterior</string>
+    <string name="active">Activo</string>
+    <string name="years_old">años</string>
+    <string name="enter_your_weight">Introduce tu peso:</string>
+    <string name="weight">Peso</string>
+    <string name="enter_your_age">Introduce tu edad:</string>
+    <string name="age">Edad</string>
+    <string name="select_height_unit">Selecciona la unidad de altura</string>
+    <string name="select_weight_unit">Selecciona la unidad de peso</string>
+    <string name="kg">kg</string>
+    <string name="pounds">libras</string>
+    <string-array name="height_units">
+        <item>Centimetros</item>
+        <item>Pies y pulgadas</item>
+    </string-array>
+    <string-array name="weight_units">
+        <item>Kilogramos</item>
+        <item>Libras</item>
+    </string-array>
+    <string name="enter_your_weight_goal">Introduce tu objetivo de peso:</string>
+    <string name="select_your_weekly_goal">Selecciona tu objetivo semanal:</string>
+    <string name="lose">Perder</string>
+    <string name="by_week">por semana</string>
+    <string name="invalid_goal">El peso introducido no es válido</string>
+    <string name="missing_goal_by_week">Por favor, selecciona un objetivo semanal antes de continuar</string>
+    <string name="last_register_step">Casi hemos acabado. Crea tu cuenta:</string>
+    <string name="remaining_calories">Calorías restantes:</string>
+    <string name="goal">Objetivo</string>
+    <string name="food">Comida</string>
+    <string name="remaining">Restante</string>
+    <string name="breakfast">Desayuno</string>
+    <string name="lunch">Almuerzo</string>
+    <string name="dinner">Cena</string>
+    <string name="snacks">Aperitivos</string>
+    <string name="exercise">Ejercicio</string>
+    <string name="water">Agua</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
+    <string name="equals">=</string>
+    <string name="add_food">Añadir comida</string>
+    <string name="back_arrow"><![CDATA[<]]></string>
+    <string name="next_arrow"><![CDATA[>]]></string>
+    <string name="prompt_food">Buscar comidas</string>
+    <string name="recent_foods">Comidas recientes</string>
+    <string name="found_foods">Comidas encontradas</string>
+    <string name="Grams">Gramos</string>
+    <string name="today">Hoy</string>
+    <string name="remove">Eliminar</string>
+    <string name="steps">Pasos</string>
+    <string name="sleep">Sueño</string>
+    <string name="body_composition">Composición corporal</string>
+    <string name="glasses">vasos</string>
+    <string name="introduce">Introduce</string>
+    <string name="save">Guardar</string>
+    <string name="muscle_mass">Masa muscular</string>
+    <string name="body_fat">Grasa corporal</string>
+    <string name="introduce_data">Introduce los datos</string>
+    <string name="edit">Editar</string>
+    <string name="bed_time">Hora de dormir</string>
+    <string name="wake_up_time">Hora de levantarse</string>
+</resources>
