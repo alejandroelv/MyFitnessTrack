@@ -89,4 +89,8 @@
     <string name="body_composition">Body composition</string>
     <string name="glasses">glasses</string>
     <string name="introduce">Introduce</string>
+    <string name="save">Save</string>
+    <string name="muscle_mass">Muscle mass</string>
+    <string name="body_fat">Body fat</string>
+    <string name="introduce_data">Introduce data</string>
 </resources>

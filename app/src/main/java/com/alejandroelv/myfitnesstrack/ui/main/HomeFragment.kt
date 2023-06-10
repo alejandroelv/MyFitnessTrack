@@ -1,6 +1,7 @@
 package com.alejandroelv.myfitnesstrack.ui.main
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -37,13 +38,17 @@ class HomeFragment : Fragment() {
             navController.navigate(R.id.action_homeFragment_to_diaryFragment)
         }
 
-        //TODO 3: Implementar la sección de sleep
+        //TODO 3 (DONE): Implementar la sección de sleep
         binding.sleepSection.setOnClickListener{
-
+            val intentSleep = Intent(this.context, SleepRegisterActivity::class.java)
+            startActivity(intentSleep)
         }
 
-        //TODO 4: Implementar la sección de body composition
-
+        //TODO 4 (DONE): Implementar la sección de body composition
+        binding.buttonChangeWeight.setOnClickListener{
+            val intentWeight = Intent(this.context, RegisterWeightActivity::class.java)
+            startActivity(intentWeight)
+        }
         //TODO 5: Implementar la sección de ejercicio
 
         return view

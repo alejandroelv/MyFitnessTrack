@@ -110,9 +110,9 @@ class RegisterWeight : Fragment() {
 
     private fun checkAnwers(){
         when{
-            user.height == 0 -> Toast.makeText(this@RegisterWeight.context, R.string.invalid_height, Toast.LENGTH_SHORT).show()
-            user.weight == 0 -> Toast.makeText(this@RegisterWeight.context, R.string.invalid_weight, Toast.LENGTH_SHORT).show()
-            user.age == 0 -> Toast.makeText(this@RegisterWeight.context, R.string.invalid_age, Toast.LENGTH_SHORT).show()
+            user.height <= 0 -> Toast.makeText(this@RegisterWeight.context, R.string.invalid_height, Toast.LENGTH_SHORT).show()
+            user.weight <= 0 -> Toast.makeText(this@RegisterWeight.context, R.string.invalid_weight, Toast.LENGTH_SHORT).show()
+            user.age < 16 || user.age > 120 -> Toast.makeText(this@RegisterWeight.context, R.string.invalid_age, Toast.LENGTH_SHORT).show()
             user.gender == 0 -> Toast.makeText(this@RegisterWeight.context, R.string.select_gender, Toast.LENGTH_SHORT).show()
             user.activityLevel == 0 -> Toast.makeText(this@RegisterWeight.context, R.string.select_activity_level, Toast.LENGTH_SHORT).show()
             else -> passToNextFragment()
