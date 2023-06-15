@@ -7,10 +7,10 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
+import com.alejandroelv.myfitnesstrack.FirebaseUtils
 import com.alejandroelv.myfitnesstrack.data.model.Day
 import com.alejandroelv.myfitnesstrack.data.model.edamamModels.Hint
 import com.alejandroelv.myfitnesstrack.databinding.ActivityFoodDetailsBinding
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FoodDetailsActivity : AppCompatActivity() {
@@ -79,16 +79,7 @@ class FoodDetailsActivity : AppCompatActivity() {
     }
 
     private fun fetchDayData(date: String) {
-        val user = FirebaseAuth.getInstance().currentUser
-        val uid = user!!.uid
-
-        val db = FirebaseFirestore.getInstance()
-        val userDocumentRef = db.collection("users").document(uid)
-        val dayDocumentRef = userDocumentRef.collection("days")
-
-        dayDocumentRef
-            .whereEqualTo("date", date)
-            .get()
+        FirebaseUtils().getDayReference(date)
             .addOnSuccessListener { querySnapshot ->
                 // Handle successful query results
                 if (querySnapshot.isEmpty) {
@@ -136,41 +127,32 @@ class FoodDetailsActivity : AppCompatActivity() {
     }
 
     private fun sendInfoToDiary() {
-        val user = FirebaseAuth.getInstance().currentUser
-        val uid = user?.uid
-
         addFoodToMeal()
 
-        if (uid != null) {
-            val db = FirebaseFirestore.getInstance()
-            val userDocumentRef = db.collection("users").document(uid)
-            val dayDocumentRef = userDocumentRef.collection("days")
+        FirebaseUtils().getDayReference(date!!)
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val db = FirebaseFirestore.getInstance()
+                    val userDocumentRef = db.collection("users").document(FirebaseUtils().getUserId())
+                    val document = querySnapshot.documents[0]
+                    val ref = userDocumentRef.collection("days").document(document.id)
+                    day.id = document.id
 
-            dayDocumentRef
-                .whereEqualTo("date", date).limit(1)
-                .get()
-                .addOnSuccessListener { querySnapshot ->
-                    if (!querySnapshot.isEmpty) {
-                        val document = querySnapshot.documents[0]
-                        val ref = userDocumentRef.collection("days").document(document.id)
-                        day.id = document.id
-
-                        ref.set(day).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Log.e("Success", "Succesful update")
-                                backToDiary()
-                            } else {
-                                Log.e("Error", "Error on update")
-                            }
+                    ref.set(day).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.e("Success", "Succesful update")
+                            backToDiary()
+                        } else {
+                            Log.e("Error", "Error on update")
                         }
-                    } else {
-                        Log.e("Error", "No document found")
                     }
+                } else {
+                    Log.e("Error", "No document found")
                 }
-                .addOnFailureListener { exception ->
-                    Log.e("TAG", "Error querying documents: ${exception.message}")
-                }
-        }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("TAG", "Error querying documents: ${exception.message}")
+            }
     }
 
     private fun backToDiary(){

@@ -11,15 +11,7 @@ class Foods : Serializable {
     @Expose
     var text: String? = null
 
-    @SerializedName("parsed")
-    @Expose
-    var parsed: List<Parsed>? = null
-
     @SerializedName("hints")
     @Expose
     var hints: List<Hint>? = null
-
-    @SerializedName("_links")
-    @Expose
-    var links: Links? = null
 }

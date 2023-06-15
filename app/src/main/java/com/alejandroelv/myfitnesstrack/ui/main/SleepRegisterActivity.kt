@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.alejandroelv.myfitnesstrack.FirebaseUtils
 import com.alejandroelv.myfitnesstrack.TimeUtils
 import com.alejandroelv.myfitnesstrack.data.model.Day
 import com.alejandroelv.myfitnesstrack.databinding.ActivitySleepRegisterBinding
@@ -33,16 +34,7 @@ class SleepRegisterActivity : AppCompatActivity() {
     }
 
     private fun fetchDayData(date: String) {
-        val user = FirebaseAuth.getInstance().currentUser
-        val uid = user!!.uid
-
-        val db = FirebaseFirestore.getInstance()
-        val userDocumentRef = db.collection("users").document(uid)
-        val dayDocumentRef = userDocumentRef.collection("days")
-
-        dayDocumentRef
-            .whereEqualTo("date", date)
-            .get()
+        FirebaseUtils().getDayReference(date)
             .addOnSuccessListener { querySnapshot ->
                 // Handle successful query results
                 if (!querySnapshot.isEmpty) {

@@ -1,21 +1,18 @@
 package com.alejandroelv.myfitnesstrack.ui.register.fragments
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.alejandroelv.myfitnesstrack.FirebaseUtils
 import com.alejandroelv.myfitnesstrack.R
 import com.alejandroelv.myfitnesstrack.data.model.User
 import com.alejandroelv.myfitnesstrack.databinding.FragmentRegisterUserBinding
 import com.alejandroelv.myfitnesstrack.ui.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.math.roundToInt
 
 class RegisterUser : Fragment() {
     private lateinit var user: User
@@ -59,30 +56,7 @@ class RegisterUser : Fragment() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    val userId: String = auth.currentUser!!.uid
-                    val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-                    val userDocumentRef = db.collection("users").document(userId)
-
-                    val userMap = hashMapOf<String, Any>()
-                    userMap["id"] = userId
-                    userMap["gender"] = user.gender
-                    userMap["age"] = user.age
-                    userMap["weight"] = user.weight
-                    userMap["height"] = user.height
-                    userMap["goal"] = user.goal
-                    userMap["goalByWeek"] = user.goalByWeek
-                    userMap["goalCalories"] = 88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * user.age)
-
-                    val goalCalories: Double = userMap["goalCalories"] as Double
-                    val roundedGoalCalories = goalCalories.roundToInt()
-
-                    val sharedPref: SharedPreferences? = context?.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-                    val editor: SharedPreferences.Editor? = sharedPref?.edit()
-                    editor?.putInt("goalCalories", roundedGoalCalories)
-                    editor?.apply()
-
-                    userDocumentRef.set(userMap)
-                        .addOnCompleteListener(requireActivity()) { task ->
+                    FirebaseUtils().saveUserData(user, requireContext()).addOnCompleteListener(requireActivity()) { task ->
                             if (task.isSuccessful) {
                                 val llamarMain = Intent(this.context, MainActivity::class.java)
                                 startActivity(llamarMain)

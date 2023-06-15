@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.alejandroelv.myfitnesstrack.FirebaseUtils
 import com.alejandroelv.myfitnesstrack.R
 import com.alejandroelv.myfitnesstrack.data.model.User
 import com.alejandroelv.myfitnesstrack.databinding.ActivityRegisterWeightBinding
@@ -23,7 +24,7 @@ class RegisterWeightActivity : AppCompatActivity() {
         binding = ActivityRegisterWeightBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        fetchUserData()
+        FirebaseUtils().getUserData(userData)
 
         binding.buttonSave.setOnClickListener{
             saveUserData()
@@ -31,14 +32,13 @@ class RegisterWeightActivity : AppCompatActivity() {
     }
 
     private fun checkUserInput() : Boolean{
-        val inputWeight = binding.etWeight.text?.toString()?.toDouble()
-        val inputBodyFat = binding.etBodyFat.text?.toString()?.toDouble()
-        val inputMuscleMass = binding.etMuscleMass.text?.toString()?.toDouble()
+        val inputWeight = binding.etWeight.text?.toString()?.toDoubleOrNull()
+        val inputBodyFat = binding.etBodyFat.text?.toString()?.toDoubleOrNull()
+        val inputMuscleMass = binding.etMuscleMass.text?.toString()?.toDoubleOrNull()
 
         if (inputWeight != null) {
             if(inputWeight <= 0.0){
                 Toast.makeText(this@RegisterWeightActivity, R.string.invalid_weight, Toast.LENGTH_SHORT).show()
-                Log.e("Check error", "El peso se considera menor que 0")
                 return false
             }
         }
@@ -54,63 +54,17 @@ class RegisterWeightActivity : AppCompatActivity() {
                 Toast.makeText(this@RegisterWeightActivity, "The muscle mass introduced must be between 0 and the weight introduced", Toast.LENGTH_SHORT).show()
             }
         }
-        Log.e("Check error", "Voy a devolver true")
         return true
     }
 
-    private fun fetchUserData(){
-        val user = FirebaseAuth.getInstance().currentUser
-        val uid = user!!.uid
-
-        val db = FirebaseFirestore.getInstance()
-        val userDocumentRef = db.collection("users").document(uid)
-
-        userDocumentRef
-            .get()
-            .addOnSuccessListener { documentSnapshot ->
-                userData.weight = (documentSnapshot.get("weight") as Long).toInt()
-                userData.height = (documentSnapshot.get("height") as Long).toInt()
-                userData.age = (documentSnapshot.get("age") as Long).toInt()
-                userData.gender = (documentSnapshot.get("gender") as Long).toInt()
-                userData.goal = (documentSnapshot.get("goal") as Long).toInt()
-                userData.goalByWeek = (documentSnapshot.get("goalByWeek") as Double)
-            }
-            .addOnFailureListener{ exception ->
-                Log.e("TAG", "Error querying documents: ${exception.message}")
-            }
-    }
-
-
     private fun saveUserData(){
         if(!checkUserInput()){
-            Log.e("Check error", "Justo antes del return")
             return
         }
 
-        val auth = FirebaseAuth.getInstance()
-        val userId: String = auth.currentUser!!.uid
-        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val userDocumentRef = db.collection("users").document(userId)
+        userData.weight = binding.etWeight.text.toString().toInt()
 
-        val userMap = hashMapOf<String, Any>()
-        userMap["id"] = userId
-        userMap["weight"] = binding.etWeight.text.toString().toInt()
-        userMap["gender"] = userData.gender
-        userMap["age"] = userData.age
-        userMap["height"] = userData.height
-        userMap["goal"] = userData.goal
-        userMap["goalByWeek"] = userData.goalByWeek
-        userMap["goalCalories"] = (88.362 + (13.397 * userData.weight) + (4.799 * userData.height) - (5.677 * userData.age))
-
-        val goalCalories: Double = userMap["goalCalories"] as Double
-        val roundedGoalCalories = goalCalories.roundToInt()
-
-        val sharedPref: SharedPreferences? = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        val editor: SharedPreferences.Editor? = sharedPref?.edit()
-        editor?.putInt("goalCalories", roundedGoalCalories)
-        editor?.apply()
-
-        userDocumentRef.set(userMap)
+        FirebaseUtils().saveUserData(userData, this)
             .addOnCompleteListener{ task ->
                 if(task.isSuccessful){
                     val intent = Intent(this@RegisterWeightActivity, MainActivity::class.java)

@@ -1,6 +1,5 @@
 package com.alejandroelv.myfitnesstrack.ui.main
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.alejandroelv.myfitnesstrack.FirebaseUtils
 import com.alejandroelv.myfitnesstrack.R
 import com.alejandroelv.myfitnesstrack.TimeUtils
 import com.alejandroelv.myfitnesstrack.data.model.Day
@@ -27,24 +27,20 @@ class HomeFragment : Fragment() {
         fetchDayData(TimeUtils().getTodayDate())
         fetchUserData()
 
-        //TODO 1 (DONE): Implementar añadir y quitar el agua
         binding.buttonAddGlass.setOnClickListener{ addWaterGlass(1) }
 
         binding.buttonRemoveGlass.setOnClickListener{ addWaterGlass(-1) }
 
-        //TODO 2 (DONE): Implementar la sección de food
         binding.buttonAddFood.setOnClickListener{
             val navController = findNavController()
             navController.navigate(R.id.action_homeFragment_to_diaryFragment)
         }
 
-        //TODO 3 (DONE): Implementar la sección de sleep
         binding.sleepSection.setOnClickListener{
             val intentSleep = Intent(this.context, SleepRegisterActivity::class.java)
             startActivity(intentSleep)
         }
 
-        //TODO 4 (DONE): Implementar la sección de body composition
         binding.buttonChangeWeight.setOnClickListener{
             val intentWeight = Intent(this.context, RegisterWeightActivity::class.java)
             startActivity(intentWeight)
@@ -55,16 +51,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchDayData(date: String) {
-        val user = FirebaseAuth.getInstance().currentUser
-        val uid = user!!.uid
-
-        val db = FirebaseFirestore.getInstance()
-        val userDocumentRef = db.collection("users").document(uid)
-        val dayDocumentRef = userDocumentRef.collection("days")
-
-        dayDocumentRef
-            .whereEqualTo("date", date)
-            .get()
+        FirebaseUtils().getDayReference(date)
             .addOnSuccessListener { querySnapshot ->
                 // Handle successful query results
                 if (querySnapshot.isEmpty) {
@@ -134,32 +121,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun sendInfoToDiary() {
-        val user = FirebaseAuth.getInstance().currentUser
-        val uid = user?.uid
-
-        if (uid != null) {
-            val db = FirebaseFirestore.getInstance()
-            val userDocumentRef = db.collection("users").document(uid)
-
-            val dayDocumentRef = if(day.id == null){
-                day.goalCalories = (context?.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-                    ?.getInt("goalCalories", 0)?.toLong() ?: 0L).toDouble()
-
-                userDocumentRef.collection("days").document()
-            }else{
-                userDocumentRef.collection("days").document(day.id!!)
+        FirebaseUtils().saveDayByFirstTime(day, requireContext())
+            .addOnSuccessListener {
+                 FirebaseUtils().getDayId(day.date) { id ->
+                    // Handle the id here
+                    if (id != null) {
+                        day.id = id
+                        showDayData()
+                    }
+                }
+                Log.e("Saved", "Saved succesfully")
             }
-
-            dayDocumentRef?.set(day)
-                ?.addOnSuccessListener {
-                    day.id = dayDocumentRef.id
-                    showDayData()
-                    Log.e("Saved", "Saved succesfully")
-                }
-                ?.addOnFailureListener { exception ->
-                    Log.e("No save", exception.message.toString())
-                }
-        }
+            .addOnFailureListener { exception ->
+                Log.e("No save", exception.message.toString())
+            }
     }
 
     private fun addWaterGlass(numberOfGlasses: Int){

@@ -1,6 +1,5 @@
 package com.alejandroelv.myfitnesstrack.ui.main
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alejandroelv.myfitnesstrack.FirebaseUtils
 import com.alejandroelv.myfitnesstrack.R
 import com.alejandroelv.myfitnesstrack.TimeUtils
 import com.alejandroelv.myfitnesstrack.data.model.Day
@@ -17,8 +17,6 @@ import com.alejandroelv.myfitnesstrack.data.model.edamamModels.Hint
 import com.alejandroelv.myfitnesstrack.databinding.FragmentDiaryBinding
 import com.alejandroelv.myfitnesstrack.ui.adapters.FoodDiaryAdapter
 import com.alejandroelv.myfitnesstrack.ui.adapters.ItemClickListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 class DiaryFragment : Fragment(), ItemClickListener {
     private lateinit var binding: FragmentDiaryBinding
@@ -54,16 +52,7 @@ class DiaryFragment : Fragment(), ItemClickListener {
     }
 
     private fun fetchDayData(date: String) {
-        val user = FirebaseAuth.getInstance().currentUser
-        val uid = user!!.uid
-
-        val db = FirebaseFirestore.getInstance()
-        val userDocumentRef = db.collection("users").document(uid)
-        val dayDocumentRef = userDocumentRef.collection("days")
-
-        dayDocumentRef
-            .whereEqualTo("date", date)
-            .get()
+        FirebaseUtils().getDayReference(date)
             .addOnSuccessListener { querySnapshot ->
                 // Handle successful query results
                 if (querySnapshot.isEmpty) {
@@ -141,30 +130,13 @@ class DiaryFragment : Fragment(), ItemClickListener {
     }
 
     private fun sendInfoToDiary() {
-        val user = FirebaseAuth.getInstance().currentUser
-        val uid = user?.uid
-
-        if (uid != null) {
-            val db = FirebaseFirestore.getInstance()
-            val userDocumentRef = db.collection("users").document(uid)
-
-            val dayDocumentRef = if(day.id == null){
-                day.goalCalories = (context?.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-                    ?.getInt("goalCalories", 0)?.toLong() ?: 0L).toDouble()
-
-                userDocumentRef.collection("days").document()
-            }else{
-                userDocumentRef.collection("days").document(day.id!!)
+        FirebaseUtils().saveDayByFirstTime(day, requireContext())
+            .addOnSuccessListener {
+                Log.e("Saved", "Saved succesfully")
             }
-
-            dayDocumentRef?.set(day)
-                ?.addOnSuccessListener {
-                    Log.e("Saved", "Saved succesfully")
-                }
-                ?.addOnFailureListener { exception ->
-                    Log.e("No save", exception.message.toString())
-                }
-        }
+            .addOnFailureListener { exception ->
+                Log.e("No save", exception.message.toString())
+            }
     }
 
     override fun onDeleteButtonClicked(food: Hint, meal: String) {

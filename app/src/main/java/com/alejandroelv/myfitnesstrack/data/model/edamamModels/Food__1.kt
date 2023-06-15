@@ -15,37 +15,10 @@ class Food__1 : Serializable{
     @Expose
     var label: String? = null
 
-    @SerializedName("knownAs")
-    @Expose
-    var knownAs: String? = null
-
     @SerializedName("nutrients")
     @Expose
     var nutrients: Nutrients__1? = null
 
     var selectedWeight : Int = 100
 
-    @SerializedName("category")
-    @Expose
-    var category: String? = null
-
-    @SerializedName("categoryLabel")
-    @Expose
-    var categoryLabel: String? = null
-
-    @SerializedName("image")
-    @Expose
-    var image: String? = null
-
-    @SerializedName("foodContentsLabel")
-    @Expose
-    var foodContentsLabel: String? = null
-
-    @SerializedName("brand")
-    @Expose
-    var brand: String? = null
-
-    @SerializedName("servingSizes")
-    @Expose
-    var servingSizes: List<ServingSize>? = null
 }
